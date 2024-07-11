@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
-
-interface Workout {
-  name: string;
-  workouts: string[];
-  totalMinutes: number;
-}
+import { DataService } from '../../services/data.service';
+import { Workout } from '../../models/workout.model';
 
 @Component({
   selector: 'app-workout-table',
@@ -24,14 +20,18 @@ export class WorkoutTableComponent implements OnInit {
   totalWorkouts: number = 0;
   filteredWorkouts: Workout[] = [];
 
+  constructor(private dataService: DataService) {}
+
   ngOnInit() {
-    this.filterWorkouts();
+    this.dataService.workouts$.subscribe(workouts => {
+      this.filterWorkouts(workouts);
+    });
   }
 
-  filterWorkouts() {
-    const filteredData = WORKOUT_DATA.filter(workout => {
-      const matchesSearchTerm = workout.name.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesWorkoutType = this.selectedWorkoutType ? workout.workouts.includes(this.selectedWorkoutType) : true;
+  filterWorkouts(workouts: Workout[]) {
+    const filteredData = workouts.filter(workout => {
+      const matchesSearchTerm = workout.userName.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesWorkoutType = this.selectedWorkoutType ? workout.type === this.selectedWorkoutType : true;
       return matchesSearchTerm && matchesWorkoutType;
     });
     this.filteredWorkouts = filteredData.slice(this.pageEvent.pageIndex * this.pageEvent.pageSize, (this.pageEvent.pageIndex + 1) * this.pageEvent.pageSize);
@@ -42,12 +42,8 @@ export class WorkoutTableComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageEvent = event;
-    this.filterWorkouts();
+    this.dataService.workouts$.subscribe(workouts => {
+      this.filterWorkouts(workouts);
+    });
   }
 }
-
-const WORKOUT_DATA: Workout[] = [
-  {name: 'John Doe', workouts: ['Running', 'Cycling'], totalMinutes: 75},
-  {name: 'Jane Smith', workouts: ['Swimming', 'Running'], totalMinutes: 80},
-  {name: 'Mike Johnson', workouts: ['Yoga', 'Cycling'], totalMinutes: 90},
-];

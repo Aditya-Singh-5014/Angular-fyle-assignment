@@ -20,7 +20,7 @@ import { WorkoutFormComponent } from './components/workout-form/workout-form.com
 import { WorkoutChartComponent } from './components/workout-chart/workout-chart.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 
-import { AppRoutingModule } from './app.routes'; // Add this line
+import { AppRoutingModule } from './app.routes';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { AppRoutingModule } from './app.routes'; // Add this line
     MatTableModule,
     MatPaginatorModule,
     MatToolbarModule,
-    AppRoutingModule // Add this line
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
