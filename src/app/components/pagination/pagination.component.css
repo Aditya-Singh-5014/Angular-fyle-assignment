@@ -1,0 +1,6 @@
+/* Center the paginator */
+mat-paginator {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}

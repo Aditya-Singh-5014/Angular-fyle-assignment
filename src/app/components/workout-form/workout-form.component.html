@@ -1,0 +1,17 @@
+<mat-card>
+  <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Workout Type</mat-label>
+      <input matInput formControlName="type" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Duration (minutes)</mat-label>
+      <input matInput formControlName="duration" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>User Name</mat-label>
+      <input matInput formControlName="userName" required />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+</mat-card>

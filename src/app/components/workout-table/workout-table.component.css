@@ -1,0 +1,18 @@
+.workout-table-container {
+  padding: 20px;
+}
+
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.search-filter-container mat-form-field {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.search-filter-container mat-form-field:last-child {
+  margin-right: 0;
+}
