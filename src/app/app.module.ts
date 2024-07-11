@@ -14,7 +14,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { WorkoutTableComponent } from './components/workout-table/workout-table.component';
-import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { WorkoutFormComponent } from './components/workout-form/workout-form.component';
 import { WorkoutChartComponent } from './components/workout-chart/workout-chart.component';
@@ -26,7 +25,6 @@ import { AppRoutingModule } from './app.routes';
   declarations: [
     AppComponent,
     WorkoutTableComponent,
-    SearchFilterComponent,
     UserFormComponent,
     WorkoutFormComponent,
     WorkoutChartComponent,
@@ -37,7 +35,7 @@ import { AppRoutingModule } from './app.routes';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCardModule,
+    MatCardModule, // Ensure MatCardModule is imported here
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

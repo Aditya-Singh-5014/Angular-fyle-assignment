@@ -12,38 +12,51 @@ import { Workout } from '../../models/workout.model';
 export class WorkoutTableComponent implements OnInit {
   searchTerm: string = '';
   selectedWorkoutType: string = '';
-  workoutTypes: string[] = ['Running', 'Cycling', 'Swimming', 'Yoga'];
-  displayedColumns: string[] = ['name', 'workouts', 'numberOfWorkouts', 'totalWorkoutMinutes'];
+  workoutTypes: string[] = [];
+  displayedColumns: string[] = ['userName', 'workouts', 'numberOfWorkouts', 'totalWorkoutMinutes'];
   dataSource = new MatTableDataSource<Workout>([]);
   pageSize: number = 5;
   pageEvent: PageEvent = { length: 0, pageIndex: 0, pageSize: 5 };
   totalWorkouts: number = 0;
-  filteredWorkouts: Workout[] = [];
+  originalData: Workout[] = []; // To store original data
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.dataService.workouts$.subscribe(workouts => {
-      this.filterWorkouts(workouts);
+      this.originalData = workouts; // Store original data
+      this.dataSource.data = workouts;
+      this.totalWorkouts = workouts.length;
+      this.populateWorkoutTypes(workouts);
+      this.applyFilter();
     });
   }
 
-  filterWorkouts(workouts: Workout[]) {
-    const filteredData = workouts.filter(workout => {
-      const matchesSearchTerm = workout.userName.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesWorkoutType = this.selectedWorkoutType ? workout.type === this.selectedWorkoutType : true;
-      return matchesSearchTerm && matchesWorkoutType;
-    });
-    this.filteredWorkouts = filteredData.slice(this.pageEvent.pageIndex * this.pageEvent.pageSize, (this.pageEvent.pageIndex + 1) * this.pageEvent.pageSize);
-    this.dataSource.data = this.filteredWorkouts;
+  populateWorkoutTypes(workouts: Workout[]) {
+    const typesSet = new Set(workouts.map(workout => workout.type));
+    this.workoutTypes = Array.from(typesSet);
+  }
+
+  applyFilter() {
+    let filteredData = this.originalData;
+
+    if (this.searchTerm) {
+      filteredData = filteredData.filter(workout =>
+        workout.userName.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    if (this.selectedWorkoutType) {
+      filteredData = filteredData.filter(workout => workout.type === this.selectedWorkoutType);
+    }
+
+    this.dataSource.data = filteredData;
     this.totalWorkouts = filteredData.length;
   }
 
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageEvent = event;
-    this.dataService.workouts$.subscribe(workouts => {
-      this.filterWorkouts(workouts);
-    });
+    this.applyFilter();
   }
 }
